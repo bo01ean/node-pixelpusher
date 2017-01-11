@@ -3,10 +3,10 @@ var PixelStrip = PixelPusher.PixelStrip;
 
 var PixelPusherInstance = new PixelPusher();
 
-PixelPusherInstance.UPDATE_FREQUENCY_MILLIS = 2; // Expose
-PixelPusherInstance.PIXELS_PER_STRIP = 360; // Default
-PixelPusherInstance.exec = function () {}; // NOP
-PixelPusherInstance.go = function () {
+PixelPusherInstance.prototype.UPDATE_FREQUENCY_MILLIS = 2; // Expose
+PixelPusherInstance.prototype.PIXELS_PER_STRIP = 360; // Default
+PixelPusherInstance.prototype.exec = function () {}; // NOP
+PixelPusherInstance.prototype.go = function () {
   PixelPusherInstance.on('discover', function(controller) {
 
     var timer = null;
