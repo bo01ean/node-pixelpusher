@@ -6,7 +6,7 @@ node-pixelpusher
 Install
 -------
 
-    npm install heroic-pixel-pusher
+    npm install https://github.com/bo01ean/node-pixelpusher
 
 Using The Library :
 ---

@@ -7,7 +7,6 @@ module.exports = function() {
     this.b = 0;
     this.a = 0;
 
-
     this.setColor = function(r,g,b,a){
         that.r = r;
         that.g = g;
