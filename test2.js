@@ -35,10 +35,10 @@ new PixelPusher().on('discover', function(controller) {
     var PIXELS_PER_STRIP = controller.params.pixelpusher.pixelsPerStrip;
 
     // create a loop that will send commands to the PP to update the strip
-    var UPDATE_FREQUENCY_MILLIS = 30;// 15 is just faster than 60 FPS
+    var UPDATE_FREQUENCY_MILLIS = 15;// 15 is just faster than 60 FPS
 
     var waveHeight = PIXELS_PER_STRIP/2;
-    var waveWidth = 10;
+    var waveWidth = 1;
     var wavePosition = 0;
 
 
@@ -46,18 +46,18 @@ new PixelPusher().on('discover', function(controller) {
         // create an array to hold the data for all the strips at once
         // loop
         var strips = [];
-        for (var stripId = 0; stripId< NUM_STRIPS; stripId ++){
-            var s = new PixelStrip(stripId,PIXELS_PER_STRIP);
+        for (var stripId = 0; stripId< NUM_STRIPS; stripId ++) {
+            var s = new PixelStrip(stripId, PIXELS_PER_STRIP);
 
             var startIdx = waveHeight+wavePosition;
-            for (var i = startIdx, j = waveWidth; i <PIXELS_PER_STRIP &&  i > waveHeight && j > 0; i --, j--){
+            for (var i = startIdx, j = waveWidth; i < PIXELS_PER_STRIP &&  i > waveHeight && j > 0; i--, j--){
                 // right wave
                 var p = s.getPixel(i);
                 p.setColor(255,0,0,(j/waveWidth));
             }
 
             var startIdx = waveHeight-wavePosition;
-            for (var i = startIdx, j = waveWidth; i > 0 &&  i < waveHeight && j > 0; i ++, j--){
+            for (var i = startIdx, j = waveWidth; i > 0 &&  i < waveHeight && j > 0; i++, j--) {
                 // right wave
                 var p = s.getPixel(i);
                 p.setColor(255,0,0,(j/waveWidth));
