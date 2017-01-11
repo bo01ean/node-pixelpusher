@@ -5,6 +5,10 @@
     "author"         : "Aaron Jones <aaron@inburst.io>",
     "contributors"         : [
         {
+            "name"         : "Nathan Trujillo",
+            "email"        : "nathan.d.trujillo@gmail.com"
+        },
+        {
             "name"         : "Aaron Jones",
             "email"        : "aaron@inburst.io"
         },
@@ -25,9 +29,6 @@
     "main"           : "./pixelpusher.js",
     "engines"        : {
         "node"         : ">=0.8"
-    },
-    "dependencies"   : {
-        "buffertools"  : "2.1.2"
     },
     "readmeFilename" : "README.md",
     "license": "MIT"
