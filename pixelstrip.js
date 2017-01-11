@@ -47,4 +47,13 @@ module.exports = function(stripId, numPixels) {
     this.getPixel = function(idx){
         return pixels[idx];
     }
+
+    this.clear = function () {
+      pixels.forEach(function (pixel) {
+        pixel.r = 0;
+        pixel.g = 0;
+        pixel.b = 0;
+        pixel.a = 0;
+      });
+    };
 }
