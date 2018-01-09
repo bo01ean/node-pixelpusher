@@ -1,35 +1,46 @@
 {
-    "name"           : "heroic-pixel-pusher",
-    "version"        : "0.2.4",
-    "description"    : "Heroic Robotics' Pixel Pusher LED controller node js interface",
-    "author"         : "Aaron Jones <aaron@inburst.io>",
-    "contributors"         : [
+    "name": "heroic-pixel-pusher",
+    "version": "0.2.4",
+    "description": "Heroic Robotics' Pixel Pusher LED controller node js interface",
+    "author": "Aaron Jones <aaron@inburst.io>",
+    "contributors": [
         {
-            "name"         : "Nathan Trujillo",
-            "email"        : "nathan.d.trujillo@gmail.com"
+            "name": "Nathan Trujillo",
+            "email": "nathan.d.trujillo@gmail.com"
         },
         {
-            "name"         : "Aaron Jones",
-            "email"        : "aaron@inburst.io"
+            "name": "Aaron Jones",
+            "email": "aaron@inburst.io"
         },
         {
-            "name"         : "Marshall Rose",
-            "email"        : "mrose17@gmail.com"
+            "name": "Marshall Rose",
+            "email": "mrose17@gmail.com"
         }
     ],
-    "repository"   : {
-        "type" : "git",
-        "url" : "https://github.com/ajones/node-pixelpusher.git"
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ajones/node-pixelpusher.git"
     },
-    "keywords"       : [
+    "keywords": [
         "Pixelpusher",
         "Heroic Robotics",
         "Pixel Pusher"
     ],
-    "main"           : "./pixelpusher.js",
-    "engines"        : {
-        "node"         : ">=0.8"
+    "main": "./pixelpusher.js",
+    "engines": {
+        "node": ">=0.8"
     },
-    "readmeFilename" : "README.md",
-    "license": "MIT"
+    "readmeFilename": "README.md",
+    "license": "MIT",
+    "dependencies": {
+        "babel-eslint": "^8.2.1",
+        "ndebug": "github:bo01ean/ndebug"
+    },
+    "devDependencies": {
+        "eslint": "^4.15.0",
+        "eslint-config-airbnb": "^16.1.0",
+        "eslint-plugin-import": "^2.8.0",
+        "eslint-plugin-jsx-a11y": "^6.0.3",
+        "eslint-plugin-react": "^7.5.1"
+    }
 }

@@ -1,2 +1,4 @@
-var PixelPusherInstance = require('./index.js');
-PixelPusherInstance.go();
+const PixelPusherInstance = require('./no.js');
+const debug = require('ndebug')('test');
+// PixelPusherInstance.go();
+debug(PixelPusherInstance);

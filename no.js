@@ -1,71 +1,77 @@
-var PixelPusher = require('./pixelpusher');
-var PixelStrip = PixelPusher.PixelStrip;
+const debug = require('ndebug')('no');
 
-var PixelPusherInstance = new PixelPusher();
+const PixelPusher = require('./index');
 
-PixelPusherInstance.prototype.UPDATE_FREQUENCY_MILLIS = 2; // Expose
-PixelPusherInstance.prototype.PIXELS_PER_STRIP = 360; // Default
-PixelPusherInstance.prototype.exec = function () {}; // NOP
-PixelPusherInstance.prototype.go = function () {
-  PixelPusherInstance.on('discover', function(controller) {
+const PixelPusherInstance = new PixelPusher();
+PixelPusherInstance.setHandler('discover', (controller) => {
+  let timer = null;
+  debug('-----------------------------------');
+  debug('Discovered PixelPusher on network: ');
+  debug(controller.params.pixelpusher);
+  debug('-----------------------------------');
 
-    var timer = null;
-    // log connection data on initial discovery
-    console.log('-----------------------------------');
-    console.log('Discovered PixelPusher on network: ');
-    console.log(controller.params.pixelpusher);
-    console.log('-----------------------------------');
-
-    // capture the update message sent back from the pp controller
-    controller.on('update', function() {
-      console.log ({
-        updatePeriod  : this.params.pixelpusher.updatePeriod,
-        deltaSequence : this.params.pixelpusher.deltaSequence,
-        powerTotal    : this.params.pixelpusher.powerTotal
-      });
-    }).on('timeout', function() {
-        console.log('TIMEOUT : PixelPusher at address [' + controller.params.ipAddress + '] with MAC (' + controller.params.macAddress + ') has timed out. Awaiting re-discovery....');
-        if (!!timer) clearInterval(timer);
+  controller.on('update', () => {
+    debug({
+      updatePeriod: this.params.pixelpusher.updatePeriod,
+      deltaSequence: this.params.pixelpusher.deltaSequence,
+      powerTotal: this.params.pixelpusher.powerTotal
     });
+  }).on('timeout', () => {
+    debug(`TIMEOUT : PixelPusher at address [ ${controller.params.ipAddress} ] with MAC (' + ${controller.params.macAddress} ) has timed out. Awaiting re-discovery....`);
+    if (timer) { clearInterval(timer); }
+  });
 
-    var NUM_STRIPS = controller.params.pixelpusher.numberStrips;
-    var STRIPS_PER_PACKET = controller.params.pixelpusher.stripsPerPkt;
-    var NUM_PACKETS_PER_UPDATE = NUM_STRIPS/STRIPS_PER_PACKET;
-    PixelPusherInstance.PIXELS_PER_STRIP = controller.params.pixelpusher.pixelsPerStrip;
+  // const NUM_STRIPS = controller.params.pixelpusher.numberStrips;
+  // const STRIPS_PER_PACKET = controller.params.pixelpusher.stripsPerPkt;
+  // const NUM_PACKETS_PER_UPDATE = NUM_STRIPS / STRIPS_PER_PACKET;
+  // debug(NUM_PACKETS_PER_UPDATE);
 
-    var waveHeight = PixelPusherInstance.PIXELS_PER_STRIP/2;
-    var waveWidth = 2;
-    var wavePosition = 0;
+  PixelPusherInstance.PIXELS_PER_STRIP = controller.params.pixelpusher.pixelsPerStrip;
 
-    var strip = new PixelStrip(0, PixelPusherInstance.PIXELS_PER_STRIP);
+  const waveHeight = PixelPusherInstance.PIXELS_PER_STRIP / 2;
+  const waveWidth = 2;
+  let wavePosition = 0;
 
-    function waveRider() {
-      var startIdx = waveHeight+wavePosition;
-      for (var i = startIdx, j = waveWidth; i < PixelPusherInstance.PIXELS_PER_STRIP &&  i > waveHeight && j > 0; i--, j--){
-          strip.getPixel(i).setColor(0, 255, 0, (j / waveWidth));
-      }
+  const strip = new PixelPusher.PixelStrip(0, PixelPusherInstance.PIXELS_PER_STRIP);
 
-      var startIdx = waveHeight-wavePosition;
-      for (var i = startIdx, j = waveWidth; i > 0 &&  i < waveHeight && j > 0; i++, j--) {
-          strip.getPixel(i).setColor(255, 0, 0, (j / waveWidth));
-      }
-
-      strip.getRandomPixel().setColor(0,0,255, 0.1);
-      //controller.refresh([strip.getStripData()]);
-      controller.emit('data', [strip.getStripData()]);
-      strip.clear();
-      wavePosition = (wavePosition + 1) % waveHeight;
+  function waveRider() {
+    let startIdx = waveHeight + wavePosition;
+    for (let i = startIdx, j = waveWidth;
+      i < PixelPusherInstance.PIXELS_PER_STRIP
+      && i > waveHeight
+      && j > 0; i -= 1, j -= 1) {
+      strip.getPixel(i).setColor(0, 255, 0, (j / waveWidth));
     }
 
-    PixelPusherInstance.exec = waveRider; // default pattern;
+    startIdx = waveHeight - wavePosition;
+    for (let i = startIdx, j = waveWidth; i > 0
+      && i < waveHeight
+      && j > 0; i += 1, j -= 1) {
+      strip.getPixel(i).setColor(255, 0, 0, (j / waveWidth));
+    }
 
-    timer = setInterval(function() {
-      PixelPusherInstance.exec();
-    }, PixelPusherInstance.UPDATE_FREQUENCY_MILLIS);
+    strip.getRandomPixel().setColor(0, 0, 255, 0.1);
+    // controller.refresh([strip.getStripData()]);
+    debug('.');
+    controller.emit('data', [strip.getStripData()]);
+    strip.clear();
+    wavePosition = (wavePosition + 1) % waveHeight;
+  }
 
-  }).on('error', function(err) {
-    console.log('PixelPusher Error: ' + err.message);
-  });
-};
+  PixelPusherInstance.exec = waveRider; // default pattern;
+
+  timer = setInterval(() => {
+    PixelPusherInstance.exec();
+  }, PixelPusherInstance.UPDATE_FREQUENCY_MILLIS);
+});
+PixelPusherInstance.setHandler('error', (err) => {
+  debug(`PixelPusher Error: ${err.message}`);
+});
+
+
+PixelPusherInstance.UPDATE_FREQUENCY_MILLIS = 1000; // Expose
+PixelPusherInstance.PIXELS_PER_STRIP = 360; // Default
+PixelPusherInstance.exec = () => {}; // NOP
+PixelPusherInstance.go = () => {};
 
 module.exports = PixelPusherInstance;
